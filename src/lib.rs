@@ -13,14 +13,15 @@ pub fn create_hash(mut cx: FunctionContext) -> JsResult<JsValue> {
     let mut hasher = blake3::Hasher::new();
     hasher.update(input_bytes);
     let mut reader = hasher.finalize_xof();
-    reader_to_buffer(&mut cx, &mut reader)
+    reader_to_buffer(&mut cx, &mut reader, 32)
 }
 
 fn reader_to_buffer<'a, T: neon::object::This>(
     cx: &mut CallContext<'a, T>,
     output_reader: &mut blake3::OutputReader,
+    length: u32,
 ) -> JsResult<'a, JsValue> {
-    let mut output_buffer = cx.argument::<JsBuffer>(0)?;
+    let mut output_buffer = cx.buffer(length)?;
     cx.borrow_mut(&mut output_buffer, |data| {
         output_reader.fill(data.as_mut_slice());
     });
