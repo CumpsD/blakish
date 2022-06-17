@@ -12,6 +12,6 @@ crate-type = ["cdylib"]
 blake3 = "1.2"
 
 [dependencies.neon]
-version = "0.9"
+version = "0.10"
 default-features = false
 features = ["napi-6"]
